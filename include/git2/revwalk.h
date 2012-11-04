@@ -10,6 +10,7 @@
 #include "common.h"
 #include "types.h"
 #include "oid.h"
+#include "vector.h"
 
 /**
  * @file git2/revwalk.h
@@ -231,6 +232,31 @@ GIT_EXTERN(void) git_revwalk_free(git_revwalk *walk);
  * @return the repository being walked
  */
 GIT_EXTERN(git_repository *) git_revwalk_repository(git_revwalk *walk);
+
+typedef struct commit_object {
+	git_oid oid;
+	uint32_t time;
+	unsigned int seen:1,
+			 uninteresting:1,
+			 topo_delay:1,
+			 parsed:1,
+			 flags : 4;
+
+	unsigned short in_degree;
+	unsigned short out_degree;
+
+	struct commit_object **parents;
+} commit_object;
+
+typedef struct commit_list {
+	commit_object *item;
+	struct commit_list *next;
+} commit_list;
+
+commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid);
+commit_object **alloc_parents(
+	git_revwalk *walk, commit_object *commit, size_t n_parents);
+int merge_bases_many(commit_list **out, git_revwalk *walk, commit_object *one, git_vector *twos);
 
 /** @} */
 GIT_END_DECL

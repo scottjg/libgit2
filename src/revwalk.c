@@ -24,26 +24,6 @@ GIT__USE_OIDMAP;
 #define RESULT   (1 << 2)
 #define STALE    (1 << 3)
 
-typedef struct commit_object {
-	git_oid oid;
-	uint32_t time;
-	unsigned int seen:1,
-			 uninteresting:1,
-			 topo_delay:1,
-			 parsed:1,
-			 flags : 4;
-
-	unsigned short in_degree;
-	unsigned short out_degree;
-
-	struct commit_object **parents;
-} commit_object;
-
-typedef struct commit_list {
-	commit_object *item;
-	struct commit_list *next;
-} commit_list;
-
 struct git_revwalk {
 	git_repository *repo;
 	git_odb *odb;
@@ -137,7 +117,7 @@ static commit_object *alloc_commit(git_revwalk *walk)
 	return (commit_object *)git_pool_malloc(&walk->commit_pool, COMMIT_ALLOC);
 }
 
-static commit_object **alloc_parents(
+commit_object **alloc_parents(
 	git_revwalk *walk, commit_object *commit, size_t n_parents)
 {
 	if (n_parents <= PARENTS_PER_COMMIT)
@@ -148,7 +128,7 @@ static commit_object **alloc_parents(
 }
 
 
-static commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid)
+commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid)
 {
 	commit_object *commit;
 	khiter_t pos;
@@ -284,7 +264,7 @@ static int interesting(git_pqueue *list)
 	return 0;
 }
 
-static int merge_bases_many(commit_list **out, git_revwalk *walk, commit_object *one, git_vector *twos)
+int merge_bases_many(commit_list **out, git_revwalk *walk, commit_object *one, git_vector *twos)
 {
 	int error;
 	unsigned int i;
@@ -837,9 +817,13 @@ int git_revwalk_new(git_revwalk **revwalk_out, git_repository *repo)
 
 	walk->repo = repo;
 
-	if (git_repository_odb(&walk->odb, repo) < 0) {
-		git_revwalk_free(walk);
-		return -1;
+	if (repo) {
+		if (git_repository_odb(&walk->odb, repo) < 0) {
+			git_revwalk_free(walk);
+			return -1;
+		}
+	} else {
+		walk->odb = NULL;
 	}
 
 	*revwalk_out = walk;
