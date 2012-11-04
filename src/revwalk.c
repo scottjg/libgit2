@@ -409,9 +409,13 @@ int git_revwalk_new(git_revwalk **revwalk_out, git_repository *repo)
 
 	walk->repo = repo;
 
-	if (git_repository_odb(&walk->odb, repo) < 0) {
-		git_revwalk_free(walk);
-		return -1;
+	if (repo) {
+		if (git_repository_odb(&walk->odb, repo) < 0) {
+			git_revwalk_free(walk);
+			return -1;
+		}
+	} else {
+		walk->odb = NULL;
 	}
 
 	*revwalk_out = walk;

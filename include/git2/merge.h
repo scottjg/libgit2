@@ -10,6 +10,8 @@
 #include "common.h"
 #include "types.h"
 #include "oid.h"
+#include "revwalk.h"
+#include "vector.h"
 
 /**
  * @file git2/merge.h
@@ -49,6 +51,9 @@ GIT_EXTERN(int) git_merge_base_many(
 	git_repository *repo,
 	const git_oid input_array[],
 	size_t length);
+
+GIT_EXTERN(int) git_merge__bases_many(git_commit_list **out, git_revwalk *walk, git_commit_list_node *one, git_vector *twos);
+
 
 /** @} */
 GIT_END_DECL

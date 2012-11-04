@@ -10,6 +10,7 @@
 #include "common.h"
 #include "types.h"
 #include "oid.h"
+#include "commit_list.h"
 
 /**
  * @file git2/revwalk.h
@@ -231,6 +232,8 @@ GIT_EXTERN(void) git_revwalk_free(git_revwalk *walk);
  * @return the repository being walked
  */
 GIT_EXTERN(git_repository *) git_revwalk_repository(git_revwalk *walk);
+
+GIT_EXTERN(git_commit_list_node *) commit_lookup(git_revwalk *walk, const git_oid *oid);
 
 /** @} */
 GIT_END_DECL

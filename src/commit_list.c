@@ -61,7 +61,7 @@ static int commit_error(git_commit_list_node *commit, const char *msg)
 	return -1;
 }
 
-static git_commit_list_node **alloc_parents(
+git_commit_list_node **alloc_parents(
 	git_revwalk *walk, git_commit_list_node *commit, size_t n_parents)
 {
 	if (n_parents <= PARENTS_PER_COMMIT)
