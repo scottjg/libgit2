@@ -254,6 +254,7 @@ typedef struct commit_list {
 } commit_list;
 
 commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid);
+int commit_parse(git_revwalk *walk, commit_object *commit);
 commit_object **alloc_parents(
 	git_revwalk *walk, commit_object *commit, size_t n_parents);
 int merge_bases_many(commit_list **out, git_revwalk *walk, commit_object *one, git_vector *twos);

@@ -234,7 +234,7 @@ static int commit_quick_parse(git_revwalk *walk, commit_object *commit, git_rawo
 	return 0;
 }
 
-static int commit_parse(git_revwalk *walk, commit_object *commit)
+int commit_parse(git_revwalk *walk, commit_object *commit)
 {
 	git_odb_object *obj;
 	int error;
