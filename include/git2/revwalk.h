@@ -253,6 +253,7 @@ typedef struct commit_list {
 	struct commit_list *next;
 } commit_list;
 
+commit_object *commit_find(git_revwalk *walk, const git_oid *oid);
 commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid);
 int commit_parse(git_revwalk *walk, commit_object *commit);
 commit_object **alloc_parents(

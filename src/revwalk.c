@@ -127,6 +127,17 @@ commit_object **alloc_parents(
 		&walk->commit_pool, (uint32_t)(n_parents * sizeof(commit_object *)));
 }
 
+commit_object *commit_find(git_revwalk *walk, const git_oid *oid)
+{
+	khiter_t pos;
+
+	/* lookup and reserve space if not already present */
+	pos = kh_get(oid, walk->commits, oid);
+	if (pos != kh_end(walk->commits))
+		return kh_value(walk->commits, pos);
+
+	return NULL;
+}
 
 commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid)
 {
@@ -135,9 +146,9 @@ commit_object *commit_lookup(git_revwalk *walk, const git_oid *oid)
 	int ret;
 
 	/* lookup and reserve space if not already present */
-	pos = kh_get(oid, walk->commits, oid);
-	if (pos != kh_end(walk->commits))
-		return kh_value(walk->commits, pos);
+	commit = commit_find(walk, oid);
+	if (commit)
+		return commit;
 
 	commit = alloc_commit(walk);
 	if (commit == NULL)
