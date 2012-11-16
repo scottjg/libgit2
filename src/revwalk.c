@@ -15,6 +15,15 @@
 
 #include <regex.h>
 
+git_commit_list_node *commit_find(git_revwalk *walk, const git_oid *oid)
+{
+	khiter_t pos = kh_get(oid, walk->commits, oid);
+	if (pos != kh_end(walk->commits))
+		return kh_value(walk->commits, pos);
+	else
+		return NULL;
+}
+
 git_commit_list_node *git_revwalk__commit_lookup(
 	git_revwalk *walk, const git_oid *oid)
 {
@@ -23,9 +32,9 @@ git_commit_list_node *git_revwalk__commit_lookup(
 	int ret;
 
 	/* lookup and reserve space if not already present */
-	pos = kh_get(oid, walk->commits, oid);
-	if (pos != kh_end(walk->commits))
-		return kh_value(walk->commits, pos);
+	commit = commit_find(walk, oid);
+	if (commit)
+		return commit;
 
 	commit = git_commit_list_alloc_node(walk);
 	if (commit == NULL)
