@@ -28,9 +28,6 @@
 
 /** Declare a public function exported for application use. */
 #if __GNUC__ >= 4
-//# define GIT_EXTERN(type) extern				\
-//			 __attribute__((visibility("default"))) \
-//			 type
 # define GIT_EXTERN(type) type
 #elif defined(_MSC_VER)
 # define GIT_EXTERN(type) __declspec(dllexport) type
