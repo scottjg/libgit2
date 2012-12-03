@@ -235,6 +235,9 @@ GIT_EXTERN(git_repository *) git_revwalk_repository(git_revwalk *walk);
 
 GIT_EXTERN(git_commit_list_node *) commit_lookup(git_revwalk *walk, const git_oid *oid);
 GIT_EXTERN(git_commit_list_node *) commit_find(git_revwalk *walk, const git_oid *oid);
+GIT_EXTERN(git_commit_list_node *) git_revwalk__commit_lookup(git_revwalk *walk, const git_oid *oid);
+
+
 /** @} */
 GIT_END_DECL
 #endif
