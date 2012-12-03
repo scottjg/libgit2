@@ -29,6 +29,7 @@ typedef struct git_commit_list_node {
 
 	unsigned short in_degree;
 	unsigned short out_degree;
+	unsigned int distance;
 
 	struct git_commit_list_node **parents;
 } git_commit_list_node;

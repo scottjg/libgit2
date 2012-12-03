@@ -31,9 +31,9 @@ int ahead_behind(git_commit_list_node *one, git_commit_list_node *two,
 			(commit->flags & (PARENT1 | PARENT2)) == (PARENT1 | PARENT2))
 			continue;
 		else if (commit->flags & PARENT1)
-			(*behind)++;
+			(*behind) += one->distance ? one->distance : 1;
 		else if (commit->flags & PARENT2)
-			(*ahead)++;
+			(*ahead) += two->distance ? two->distance : 1;
 
 		for (i = 0; i < commit->out_degree; i++) {
 			git_commit_list_node *p = commit->parents[i];
