@@ -31,6 +31,9 @@ GIT_BEGIN_DECL
  */
 GIT_EXTERN(int) git_graph_ahead_behind(size_t *ahead, size_t *behind, git_repository *repo, const git_oid *one, const git_oid *two);
 
+GIT_EXTERN(int) ahead_behind(git_commit_list_node *one,
+	git_commit_list_node *two, size_t *ahead, size_t *behind);
+
 /** @} */
 GIT_END_DECL
 #endif

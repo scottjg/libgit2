@@ -10,7 +10,7 @@
 #include "merge.h"
 #include "git2/graph.h"
 
-static int ahead_behind(git_commit_list_node *one, git_commit_list_node *two,
+int ahead_behind(git_commit_list_node *one, git_commit_list_node *two,
 	size_t *ahead, size_t *behind)
 {
 	git_commit_list_node *commit;
