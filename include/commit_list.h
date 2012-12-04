@@ -29,9 +29,8 @@ typedef struct git_commit_list_node {
 
 	unsigned short in_degree;
 	unsigned short out_degree;
-	unsigned int distance;
-
 	struct git_commit_list_node **parents;
+	unsigned int *distances;
 } git_commit_list_node;
 
 typedef struct git_commit_list {
@@ -47,6 +46,7 @@ git_commit_list *git_commit_list_insert_by_date(git_commit_list_node *item, git_
 int git_commit_list_parse(git_revwalk *walk, git_commit_list_node *commit);
 git_commit_list_node *git_commit_list_pop(git_commit_list **stack);
 git_commit_list_node **alloc_parents(git_revwalk *walk, git_commit_list_node *commit, size_t n_parents);
+unsigned int *alloc_distances(git_revwalk *walk, git_commit_list_node *commit, size_t n_parents);
 
 
 #endif

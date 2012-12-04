@@ -71,6 +71,12 @@ git_commit_list_node **alloc_parents(
 		&walk->commit_pool, (uint32_t)(n_parents * sizeof(git_commit_list_node *)));
 }
 
+unsigned int *alloc_distances(
+	git_revwalk *walk, git_commit_list_node *commit, size_t n_parents)
+{
+	return (unsigned int *)git_pool_malloc(
+		&walk->commit_pool, (uint32_t)(n_parents * sizeof(unsigned int)));
+}
 
 void git_commit_list_free(git_commit_list **list_p)
 {
