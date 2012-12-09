@@ -146,7 +146,7 @@ on_error:
 	return -1;
 }
 
-static int interesting(git_pqueue *list)
+static int interesting(git_pqueue *list, git_commit_list *roots)
 {
 	unsigned int i;
 	/* element 0 isn't used - we need to start at 1 */
@@ -154,6 +154,12 @@ static int interesting(git_pqueue *list)
 		git_commit_list_node *commit = list->d[i];
 		if ((commit->flags & STALE) == 0)
 			return 1;
+	}
+
+	while (roots) {
+		if ((roots->item->flags & STALE) == 0)
+			return 1;
+		roots = roots->next;
 	}
 
 	return 0;
@@ -164,8 +170,8 @@ int git_merge__bases_many(git_commit_list **out, git_revwalk *walk, git_commit_l
 	int error;
 	unsigned int i;
 	git_commit_list_node *two;
-	git_commit_list *result = NULL, *tmp = NULL;
 	git_pqueue list;
+	git_commit_list *result = NULL, *tmp = NULL, *roots = NULL;
 
 	/* if the commit is repeated, we have a our merge base already */
 	git_vector_foreach(twos, i, two) {
@@ -191,7 +197,7 @@ int git_merge__bases_many(git_commit_list **out, git_revwalk *walk, git_commit_l
 	}
 
 	/* as long as there are non-STALE commits */
-	while (1) { //interesting(&list)) {
+	while (interesting(&list, roots)) {
 		git_commit_list_node *commit;
 		int flags;
 
@@ -220,6 +226,11 @@ int git_merge__bases_many(git_commit_list **out, git_revwalk *walk, git_commit_l
 
 			p->flags |= flags;
 			if (git_pqueue_insert(&list, p) < 0)
+				return -1;
+		}
+
+		if (commit->out_degree == 0) {
+			if (git_commit_list_insert(commit, &roots) == NULL)
 				return -1;
 		}
 	}
