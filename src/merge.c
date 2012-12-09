@@ -191,11 +191,13 @@ int git_merge__bases_many(git_commit_list **out, git_revwalk *walk, git_commit_l
 	}
 
 	/* as long as there are non-STALE commits */
-	while (interesting(&list)) {
+	while (1) { //interesting(&list)) {
 		git_commit_list_node *commit;
 		int flags;
 
 		commit = git_pqueue_pop(&list);
+		if (commit == NULL)
+			break;
 
 		flags = commit->flags & (PARENT1 | PARENT2 | STALE);
 		if (flags == (PARENT1 | PARENT2)) {

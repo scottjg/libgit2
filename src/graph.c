@@ -28,24 +28,25 @@ int ahead_behind(git_commit_list_node *one, git_commit_list_node *two,
 		goto on_error;
 
 	while ((commit = git_pqueue_pop(&pq)) != NULL) {
-		printf("popped %s (%s|%s|%s)...", git_oid_allocfmt(commit),
-		       (commit->flags & RESULT) ? "RESULT"  : "",
-		       (commit->flags & PARENT1)? "PARENT1" : "",
-		       (commit->flags & PARENT2)? "PARENT2" : "");
-		if (commit->flags & RESULT ||
+		//printf("popped %s (%s|%s|%s|%s)...", git_oid_allocfmt(commit),
+		//       (commit->flags & RESULT) ? "RESULT"  : "",
+		//       (commit->flags & PARENT1)? "PARENT1" : "",
+		//       (commit->flags & PARENT2)? "PARENT2" : "",
+		//       (commit->flags & STALE)  ? "STALE"   : "");
+		if (commit->flags & (RESULT|STALE) ||
 			(commit->flags & (PARENT1 | PARENT2)) == (PARENT1 | PARENT2)) {
-			printf("skipped\n");
+			//printf("skipped\n");
 			continue;
 		} else {
-			printf("processing\n");
+			//printf("processing\n");
 		}
 		if (commit->flags & PARENT1) {
 			(*behind)++;
-			printf("behind++ for %s.\n", git_oid_allocfmt(commit));
+			//printf("behind++ for %s.\n", git_oid_allocfmt(commit));
 		}
 		else if (commit->flags & PARENT2) {
 			(*ahead)++;
-			printf("ahead++ for %s.\n", git_oid_allocfmt(commit));
+			//printf("ahead++ for %s.\n", git_oid_allocfmt(commit));
 		}
 
 		for (i = 0; i < commit->out_degree; i++) {
@@ -53,11 +54,11 @@ int ahead_behind(git_commit_list_node *one, git_commit_list_node *two,
 
 			if (commit->flags & PARENT1) {
 				(*behind) += commit->distances[i]-1;
-				printf("behind, added edge to %s with distance=%d\n", git_oid_allocfmt(p), commit->distances[i]-1);
+				//printf("behind, added edge to %s with distance=%d\n", git_oid_allocfmt(p), commit->distances[i]-1);
 			}
 			else if (commit->flags & PARENT2) {
 				(*ahead) += commit->distances[i]-1;
-				printf("ahead, added edge to %s with distance=%d\n", git_oid_allocfmt(p), commit->distances[i]-1);
+				//printf("ahead, added edge to %s with distance=%d\n", git_oid_allocfmt(p), commit->distances[i]-1);
 			}
 
 			if (git_pqueue_insert(&pq, p) < 0)
