@@ -111,6 +111,9 @@ GIT_EXTERN(void) giterr_set_str(int error_class, const char *string);
  */
 GIT_EXTERN(void) giterr_set_oom(void);
 
+GIT_EXTERN(void) giterr_set(int error_class, const char *string, ...);
+
+
 /** @} */
 GIT_END_DECL
 #endif
