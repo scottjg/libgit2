@@ -78,6 +78,11 @@ unsigned int *alloc_distances(
 		&walk->commit_pool, (uint32_t)(n_parents * sizeof(unsigned int)));
 }
 
+char *alloc_author(git_revwalk *walk, size_t len)
+{
+	return (char *)git_pool_malloc(&walk->commit_pool, (uint32_t)(len));
+}
+
 void git_commit_list_free(git_commit_list **list_p)
 {
 	git_commit_list *list = *list_p;

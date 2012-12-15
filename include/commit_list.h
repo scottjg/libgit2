@@ -31,6 +31,8 @@ typedef struct git_commit_list_node {
 	unsigned short out_degree;
 	struct git_commit_list_node **parents;
 	unsigned int *distances;
+	char *author_name;
+	char *author_email;
 } git_commit_list_node;
 
 typedef struct git_commit_list {
@@ -47,6 +49,6 @@ int git_commit_list_parse(git_revwalk *walk, git_commit_list_node *commit);
 git_commit_list_node *git_commit_list_pop(git_commit_list **stack);
 git_commit_list_node **alloc_parents(git_revwalk *walk, git_commit_list_node *commit, size_t n_parents);
 unsigned int *alloc_distances(git_revwalk *walk, git_commit_list_node *commit, size_t n_parents);
-
+char *alloc_author(git_revwalk *walk, size_t len);
 
 #endif
