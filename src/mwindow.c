@@ -298,7 +298,7 @@ int git_mwindow_file_deregister(git_mwindow_file *mwf)
 	}
 	git_mutex_unlock(&git__mwindow_mutex);
 
-	giterr_set(GITERR_ODB, "Failed to find the memory window file to deregister");
+	//giterr_set(GITERR_ODB, "Failed to find the memory window file to deregister");
 	return -1;
 }
 
