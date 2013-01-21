@@ -221,17 +221,26 @@ int git_merge__bases_many(git_commit_list **out, git_revwalk *walk, git_commit_l
 			if ((p->flags & flags) == flags)
 				continue;
 
-			if ((error = git_commit_list_parse(walk, p)) < 0)
+			if ((error = git_commit_list_parse(walk, p)) < 0) {
+				git_pqueue_free(&list);
+				git__free(tmp);
 				return error;
+			}
 
 			p->flags |= flags;
-			if (git_pqueue_insert(&list, p) < 0)
+			if (git_pqueue_insert(&list, p) < 0) {
+				git_pqueue_free(&list);
+				git__free(tmp);
 				return -1;
+			}
 		}
 
 		if (commit->out_degree == 0) {
-			if (git_commit_list_insert(commit, &roots) == NULL)
+			if (git_commit_list_insert(commit, &roots) == NULL) {
+				git_pqueue_free(&list);
+				git__free(tmp);
 				return -1;
+			}
 		}
 	}
 

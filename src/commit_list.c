@@ -190,6 +190,13 @@ int git_commit_list_parse(git_revwalk *walk, git_commit_list_node *commit)
 	if (commit->parsed)
 		return 0;
 
+	if (!walk->odb && !commit->parsed) {
+		char *oidstr = git_oid_allocfmt(&commit->oid);
+		giterr_set(GITERR_INVALID, "Hit unparsed commit %s (not in cache?)", oidstr);
+		git__free(oidstr);
+		return -1;
+	}
+
 	if ((error = git_odb_read(&obj, walk->odb, &commit->oid)) < 0)
 		return error;
 
