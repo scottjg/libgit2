@@ -174,8 +174,11 @@ static int commit_quick_parse(git_revwalk *walk, git_commit_list_node *commit, g
 			buffer--;
 	}
 
-	if ((buffer == committer_start) || (git__strtol32(&commit_time, (char *)(buffer + 1), NULL, 10) < 0))
-		return commit_error(commit, "cannot parse commit time");
+	if ((buffer == committer_start) || (git__strtol32(&commit_time, (char *)(buffer + 1), NULL, 10) < 0)) {
+		//git__strtol32(&commit_time, (char *)(buffer + 1), NULL, 10);
+		//return commit_error(commit, "cannot parse commit time");
+		commit_time = 0;
+	}
 
 	commit->time = (time_t)commit_time;
 	commit->parsed = 1;

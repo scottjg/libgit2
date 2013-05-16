@@ -253,8 +253,11 @@ static int parse_time(git_time_t *time_out, const char *buffer)
 
 	if (!error)
 		*time_out = (git_time_t)time;
+	else
+		*time_out = 0;
 
-	return error;
+	return 0;
+	//return error;
 }
 
 int git_signature__parse(git_signature *sig, const char **buffer_out,
